@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatStream - Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            color: #eee;
+            font-family: monospace;
+            font-size: 16pt;
+        }
+    </style>
+    <script type="text/javascript">
+        function onWsMessage(event) {
+            let msg = JSON.parse(event.data);
+            let tbody = window.document.querySelector("tbody");
+            let tr = window.document.createElement("tr");
+            {
+                let td = window.document.createElement("td");
+                td.textContent = msg.id;
+                tr.appendChild(td);
+            } {
+                let td = window.document.createElement("td");
+                td.textContent = msg.timestamp;
+                tr.appendChild(td);
+            } {
+                let td = window.document.createElement("td");
+                let pre = window.document.createElement("pre");
+                pre.textContent = msg.payload.lines.join("\n");
+                td.appendChild(pre);
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+
+        function onWindowLoad(event) {
+            let protocol = window.location.protocol == "https:" ? "wss" : "ws";
+            window.ws = new WebSocket(`${protocol}://${window.location.host}`);
+            ["open", "message", "close", "error"].forEach(e =>
+                window.ws.addEventListener(e, console.log)
+            );
+            window.ws.addEventListener("message", onWsMessage);
+        }
+
+        window.addEventListener("load", onWindowLoad);
+    </script>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Timestamp</th>
+                <th>Payload</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</body>
+
+</html>

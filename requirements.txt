@@ -1,3 +1,7 @@
-requests
-flask
-gevent
+Werkzeug == 1.0.1 # enforces WebSocket compatibility (see below)
+flask == 1.1.4 # 2.0+ requires Werkzeug >= 2.0, which breaks WebSocket support on Linux
+markupsafe == 2.0.1 # Python version compatibility w/ soft_unicode breaking dependency
+requests >= 2.24
+gevent >= 20.9
+Flask-Sockets >= 0.2
+gevent-websocket >= 0.10
